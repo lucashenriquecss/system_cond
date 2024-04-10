@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,8 +23,7 @@ public class UnitController {
 
     @GetMapping
     public ResponseEntity<List<UnitDTO>> getAllUnits() {
-        List<Unit> units = unitService.getAllUnits();
-        List<UnitDTO> unitDTOs = units.stream()
+        List<UnitDTO> unitDTOs = unitService.getAllUnits().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(unitDTOs);
@@ -33,9 +31,9 @@ public class UnitController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UnitDTO> getUnitById(@PathVariable String id) {
-        Unit unit = unitService.getUnitById(id);
-        if (unit != null) {
-            return ResponseEntity.ok(convertToDTO(unit));
+        UnitDTO unitDTO = convertToDTO(unitService.getUnitById(id));
+        if (unitDTO != null) {
+            return ResponseEntity.ok(unitDTO);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -43,15 +41,15 @@ public class UnitController {
 
     @PostMapping
     public ResponseEntity<UnitDTO> createUnit(@RequestBody UnitDTO unitDTO) {
-        Unit unit = unitService.createUnit(convertToEntity(unitDTO));
-        return new ResponseEntity<>(convertToDTO(unit), HttpStatus.CREATED);
+        UnitDTO createdUnitDTO = convertToDTO(unitService.createUnit(unitDTO));
+        return new ResponseEntity<>(createdUnitDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UnitDTO> updateUnit(@PathVariable String id, @RequestBody UnitDTO unitDTO) {
-        Unit unit = unitService.updateUnit(id, convertToEntity(unitDTO));
-        if (unit != null) {
-            return ResponseEntity.ok(convertToDTO(unit));
+        UnitDTO updatedUnitDTO = convertToDTO(unitService.updateUnit(id, unitDTO));
+        if (updatedUnitDTO != null) {
+            return ResponseEntity.ok(updatedUnitDTO);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -68,16 +66,9 @@ public class UnitController {
         unitDTO.setId(unit.getId());
         unitDTO.setNumber(unit.getNumber());
         unitDTO.setRoomNumber(unit.getRoomNumber());
-        // Se necessário, mapeie outros campos
-        return unitDTO;
-    }
+        unitDTO.setResidents(unit.getResidents());
 
-    private Unit convertToEntity(UnitDTO unitDTO) {
-        Unit unit = new Unit();
-        unit.setId(unitDTO.getId());
-        unit.setNumber(unitDTO.getNumber());
-        unit.setRoomNumber(unitDTO.getRoomNumber());
-        // Se necessário, mapeie outros campos
-        return unit;
+        // Outros campos, se necessário
+        return unitDTO;
     }
 }

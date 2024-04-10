@@ -1,46 +1,76 @@
 package com.example.system_cond.service;
 
+import com.example.system_cond.dto.PaymentDTO;
+import com.example.system_cond.dto.UnitDTO;
 import com.example.system_cond.entity.Payment;
+import com.example.system_cond.entity.Unit;
 import com.example.system_cond.repository.PaymentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.system_cond.repository.UnitRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
 
-    @Autowired
     public PaymentService(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
     }
 
-    public List<Payment> getAllPayments() {
-        return paymentRepository.findAll();
+    public List<PaymentDTO> getAllPayments() {
+        return paymentRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Payment getPaymentById(String id) {
-        return paymentRepository.findById(id).orElse(null);
+    public PaymentDTO getPaymentById(String id) {
+        Optional<Payment> paymentOptional = paymentRepository.findById(id);
+        return paymentOptional.map(this::convertToDTO).orElse(null);
     }
 
-    public Payment createPayment(Payment payment) {
-        // Adicione qualquer lógica de validação ou processamento aqui, se necessário
-        return paymentRepository.save(payment);
+    public PaymentDTO createPayment(PaymentDTO paymentDTO) {
+        Payment payment = convertToEntity(paymentDTO);
+        Payment savedPayment = paymentRepository.save(payment);
+        return convertToDTO(savedPayment);
     }
 
-    public Payment updatePayment(String id, Payment updatedPayment) {
-        Payment payment = paymentRepository.findById(id).orElse(null);
-        if (payment != null) {
-            // Atualize os campos do pagamento existente com os valores do pagamento atualizado
-            // Certifique-se de que a entidade de pagamento passada está corretamente configurada com o ID atualizado, se necessário
-            // Adicione qualquer outra lógica de validação ou processamento aqui, se necessário
-            return paymentRepository.save(updatedPayment);
+    public PaymentDTO updatePayment(String id, PaymentDTO paymentDTO) {
+        Optional<Payment> paymentOptional = paymentRepository.findById(id);
+        if (paymentOptional.isPresent()) {
+            Payment payment = paymentOptional.get();
+            // Atualize os campos do pagamento com base nos dados do DTO
+            payment.setValue(paymentDTO.getValue());
+            payment.setDueDate(paymentDTO.getDueDate());
+            payment.setStatus(paymentDTO.getStatus());
+            // Salve o pagamento atualizado
+            Payment updatedPayment = paymentRepository.save(payment);
+            return convertToDTO(updatedPayment);
         }
-        return null; // ou lance uma exceção indicando que o pagamento não foi encontrado
+        return null;
     }
 
     public void deletePayment(String id) {
         paymentRepository.deleteById(id);
+    }
+
+    private PaymentDTO convertToDTO(Payment payment) {
+        PaymentDTO paymentDTO = new PaymentDTO();
+        paymentDTO.setId(payment.getId());
+        paymentDTO.setValue(payment.getValue());
+        paymentDTO.setDueDate(payment.getDueDate());
+        paymentDTO.setStatus(payment.getStatus());
+        return paymentDTO;
+    }
+
+    private Payment convertToEntity(PaymentDTO paymentDTO) {
+        Payment payment = new Payment();
+        // Converta os campos do DTO para a entidade Payment
+        payment.setValue(paymentDTO.getValue());
+        payment.setDueDate(paymentDTO.getDueDate());
+        payment.setStatus(paymentDTO.getStatus());
+        return payment;
     }
 }
