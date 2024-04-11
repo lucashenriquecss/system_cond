@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -25,6 +27,9 @@ public class Resident {
 
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL)
     private List<Payment> payments;
+
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL)
+    private List<Reserve> reserves;
 
     @JsonIgnore // Ignorar a propriedade unit durante a serialização JSON
     @ManyToOne(fetch = FetchType.LAZY)
@@ -70,6 +75,7 @@ public class Resident {
     public void setPayments(List<Payment> payments) {
         this.payments = payments;
     }
+
 
     public Unit getUnit() {
         return unit;

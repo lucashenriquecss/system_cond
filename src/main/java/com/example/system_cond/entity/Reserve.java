@@ -8,22 +8,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "payments")
+@Table(name = "reserves")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Payment {
+public class Reserve {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private Integer value;
-    private String dueDate;
-    private String status;
+    private String name;
+    private String description;
+    private String availability;
+    private String reserveDate;
 
-    @JsonIgnore // Ignorar a propriedade unit durante a serialização JSON
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="resident_id")
+
     private Resident resident;
 
     public String getId() {
@@ -34,30 +37,37 @@ public class Payment {
         this.id = id;
     }
 
-    public Integer getValue() {
-        return value;
+    public String getName() {
+        return name;
     }
 
-    public void setValue(Integer value) {
-        this.value = value;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDueDate() {
-        return dueDate;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getStatus() {
-        return status;
+    public String getAvailability() {
+        return availability;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setAvailability(String availability) {
+        this.availability = availability;
     }
 
+    public String getReserveDate() {
+        return reserveDate;
+    }
+
+    public void setReserveDate(String reserveDate) {
+        this.reserveDate = reserveDate;
+    }
     public Resident getResident() {
         return resident;
     }
@@ -65,4 +75,7 @@ public class Payment {
     public void setResident(Resident resident) {
         this.resident = resident;
     }
+
+
+
 }

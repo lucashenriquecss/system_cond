@@ -3,8 +3,10 @@ package com.example.system_cond.service;
 import com.example.system_cond.dto.PaymentDTO;
 import com.example.system_cond.dto.UnitDTO;
 import com.example.system_cond.entity.Payment;
+import com.example.system_cond.entity.Resident;
 import com.example.system_cond.entity.Unit;
 import com.example.system_cond.repository.PaymentRepository;
+import com.example.system_cond.repository.ResidentRepository;
 import com.example.system_cond.repository.UnitRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -15,9 +17,11 @@ import java.util.stream.Collectors;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final ResidentRepository residentRepository;
 
-    public PaymentService(PaymentRepository paymentRepository) {
+    public PaymentService(PaymentRepository paymentRepository,ResidentRepository residentRepository) {
         this.paymentRepository = paymentRepository;
+        this.residentRepository = residentRepository;
     }
 
     public List<PaymentDTO> getAllPayments() {
@@ -62,6 +66,7 @@ public class PaymentService {
         paymentDTO.setValue(payment.getValue());
         paymentDTO.setDueDate(payment.getDueDate());
         paymentDTO.setStatus(payment.getStatus());
+        paymentDTO.setResidentId(String.valueOf(payment.getResident()));
         return paymentDTO;
     }
 
@@ -71,6 +76,8 @@ public class PaymentService {
         payment.setValue(paymentDTO.getValue());
         payment.setDueDate(paymentDTO.getDueDate());
         payment.setStatus(paymentDTO.getStatus());
+        Resident resident = residentRepository.findById(paymentDTO.getResidentId()).orElse(null);
+        payment.setResident(resident);
         return payment;
     }
 }
