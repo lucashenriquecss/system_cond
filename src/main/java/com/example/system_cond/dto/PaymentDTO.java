@@ -13,6 +13,7 @@ public class PaymentDTO extends Payment {
     private String dueDate;
     private String status;
     private String residentId;
+    private String balanceId;
     // Outros campos, se necessário
 
     // Getters e Setters
@@ -54,5 +55,9 @@ public class PaymentDTO extends Payment {
 
     public void setResidentId(String residentId) {
         this.residentId = residentId;
+    }
+
+    public String getBalanceId() {
+        return balanceId;
     }
 }

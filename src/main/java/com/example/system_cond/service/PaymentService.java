@@ -5,6 +5,7 @@ import com.example.system_cond.dto.UnitDTO;
 import com.example.system_cond.entity.Payment;
 import com.example.system_cond.entity.Resident;
 import com.example.system_cond.entity.Unit;
+import com.example.system_cond.repository.BalanceRepository;
 import com.example.system_cond.repository.PaymentRepository;
 import com.example.system_cond.repository.ResidentRepository;
 import com.example.system_cond.repository.UnitRepository;
@@ -18,10 +19,11 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final ResidentRepository residentRepository;
-
-    public PaymentService(PaymentRepository paymentRepository,ResidentRepository residentRepository) {
+    private final BalanceRepository balanceRepository;
+    public PaymentService(PaymentRepository paymentRepository,ResidentRepository residentRepository,BalanceRepository balanceRepository) {
         this.paymentRepository = paymentRepository;
         this.residentRepository = residentRepository;
+        this.balanceRepository = balanceRepository;
     }
 
     public List<PaymentDTO> getAllPayments() {
