@@ -1,5 +1,6 @@
 package com.example.system_cond.dto;
 
+import com.example.system_cond.entity.Extract;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExtractDTO {
+public class ExtractDTO extends Extract {
     private String id;
     private String description;
     private Integer value;

@@ -5,10 +5,7 @@ import com.example.system_cond.dto.UnitDTO;
 import com.example.system_cond.entity.Payment;
 import com.example.system_cond.entity.Resident;
 import com.example.system_cond.entity.Unit;
-import com.example.system_cond.repository.BalanceRepository;
-import com.example.system_cond.repository.PaymentRepository;
-import com.example.system_cond.repository.ResidentRepository;
-import com.example.system_cond.repository.UnitRepository;
+import com.example.system_cond.repository.*;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -20,10 +17,12 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final ResidentRepository residentRepository;
     private final BalanceRepository balanceRepository;
-    public PaymentService(PaymentRepository paymentRepository,ResidentRepository residentRepository,BalanceRepository balanceRepository) {
+    private final ExtractRepository extractRepository;
+    public PaymentService(ExtractRepository extractRepository,PaymentRepository paymentRepository,ResidentRepository residentRepository,BalanceRepository balanceRepository) {
         this.paymentRepository = paymentRepository;
         this.residentRepository = residentRepository;
         this.balanceRepository = balanceRepository;
+        this.extractRepository = extractRepository;
     }
 
     public List<PaymentDTO> getAllPayments() {
@@ -40,6 +39,7 @@ public class PaymentService {
     public PaymentDTO createPayment(PaymentDTO paymentDTO) {
         Payment payment = convertToEntity(paymentDTO);
         Payment savedPayment = paymentRepository.save(payment);
+
         return convertToDTO(savedPayment);
     }
 
@@ -47,11 +47,10 @@ public class PaymentService {
         Optional<Payment> paymentOptional = paymentRepository.findById(id);
         if (paymentOptional.isPresent()) {
             Payment payment = paymentOptional.get();
-            // Atualize os campos do pagamento com base nos dados do DTO
             payment.setValue(paymentDTO.getValue());
             payment.setDueDate(paymentDTO.getDueDate());
             payment.setStatus(paymentDTO.getStatus());
-            // Salve o pagamento atualizado
+
             Payment updatedPayment = paymentRepository.save(payment);
             return convertToDTO(updatedPayment);
         }
