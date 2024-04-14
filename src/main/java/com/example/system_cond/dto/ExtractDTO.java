@@ -18,6 +18,7 @@ public class ExtractDTO extends Extract {
     private String typeTransaction;
     private String details;
 
+
     public String getId() {
         return id;
     }

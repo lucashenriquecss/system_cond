@@ -52,6 +52,7 @@ public class PaymentService {
             payment.setStatus(paymentDTO.getStatus());
 
             Payment updatedPayment = paymentRepository.save(payment);
+
             return convertToDTO(updatedPayment);
         }
         return null;
@@ -73,7 +74,7 @@ public class PaymentService {
 
     private Payment convertToEntity(PaymentDTO paymentDTO) {
         Payment payment = new Payment();
-        // Converta os campos do DTO para a entidade Payment
+
         payment.setValue(paymentDTO.getValue());
         payment.setDueDate(paymentDTO.getDueDate());
         payment.setStatus(paymentDTO.getStatus());

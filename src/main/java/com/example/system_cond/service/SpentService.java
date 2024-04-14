@@ -40,11 +40,7 @@ public class SpentService {
             balance = balanceRepository.findById(spentDTO.getBalanceId()).orElse(null);
         }
 
-
-
-
-
-            balance.registerSpent(spentDTO.getValue());
+        balance.registerSpent(spentDTO.getValue());
 
 
         Balance updatedBalance = balanceRepository.save(balance);

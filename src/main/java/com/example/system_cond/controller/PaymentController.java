@@ -1,8 +1,10 @@
 package com.example.system_cond.controller;
 
+import com.example.system_cond.dto.ExtractDTO;
 import com.example.system_cond.dto.PaymentDTO;
 import com.example.system_cond.entity.Payment;
 import com.example.system_cond.service.BalanceService;
+import com.example.system_cond.service.ExtractService;
 import com.example.system_cond.service.PaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +17,11 @@ public class PaymentController {
 
     private final PaymentService paymentService;
     private final BalanceService balanceService;
-    public PaymentController(PaymentService paymentService,BalanceService balanceService) {
+    private final ExtractService extractService;
+    public PaymentController(ExtractService extractService,PaymentService paymentService,BalanceService balanceService) {
         this.paymentService = paymentService;
         this.balanceService = balanceService;
+        this.extractService = extractService;
     }
 
     @GetMapping
@@ -43,7 +47,10 @@ public class PaymentController {
     @PutMapping("/{id}")
     public ResponseEntity<PaymentDTO> updatePayment(@PathVariable String id, @RequestBody PaymentDTO paymentDTO) {
         PaymentDTO updatedPayment = paymentService.updatePayment(id, paymentDTO);
-         balanceService.updateBalance(paymentDTO);
+
+        balanceService.updateBalance(paymentDTO);
+        extractService.createExtractPayment(paymentDTO);
+
         return ResponseEntity.ok(updatedPayment);
     }
 

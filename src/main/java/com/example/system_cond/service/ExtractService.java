@@ -2,6 +2,7 @@ package com.example.system_cond.service;
 
 import com.example.system_cond.dto.ExtractDTO;
 import com.example.system_cond.dto.PaymentDTO;
+import com.example.system_cond.dto.SpentDTO;
 import com.example.system_cond.entity.Extract;
 import com.example.system_cond.entity.Payment;
 import com.example.system_cond.repository.ExtractRepository;
@@ -26,7 +27,28 @@ public class ExtractService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-    public ExtractDTO createExtract(ExtractDTO extractDTO){
+    public ExtractDTO createExtractPayment(PaymentDTO paymentDTO){
+
+        ExtractDTO extractDTO = new ExtractDTO();
+        extractDTO.setDescription("Pagamento mensal de condominio");
+        extractDTO.setDetails(paymentDTO.getResidentId());
+        extractDTO.setValue(paymentDTO.getValue());
+        extractDTO.setDateTransaction("data hoje"); //TODO:mudar o tipo depois
+        extractDTO.setTypeTransaction("payment");
+
+        Extract extract = convertToEntity(extractDTO);
+        Extract savedExtract = extractRepository.save(extract);
+        return convertToDTO(savedExtract);
+    }
+    public ExtractDTO createExtractSpent(SpentDTO spentDTO){
+
+        ExtractDTO extractDTO = new ExtractDTO();
+        extractDTO.setDescription(spentDTO.getDescription());
+        extractDTO.setDetails(spentDTO.getType());
+        extractDTO.setValue(spentDTO.getValue());
+        extractDTO.setDateTransaction("data hoje"); //TODO:mudar o tipo depois
+        extractDTO.setTypeTransaction("spent");
+
         Extract extract = convertToEntity(extractDTO);
         Extract savedExtract = extractRepository.save(extract);
         return convertToDTO(savedExtract);

@@ -3,6 +3,7 @@ package com.example.system_cond.controller;
 import com.example.system_cond.dto.PaymentDTO;
 import com.example.system_cond.dto.SpentDTO;
 import com.example.system_cond.service.BalanceService;
+import com.example.system_cond.service.ExtractService;
 import com.example.system_cond.service.PaymentService;
 import com.example.system_cond.service.SpentService;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,21 @@ public class SpentController {
     private final PaymentService paymentService;
     private final BalanceService balanceService;
     private final SpentService spentService;
+    private final ExtractService extractService;
 
-    public SpentController( SpentService spentService,PaymentService paymentService,BalanceService balanceService) {
+    public SpentController( ExtractService extractService,SpentService spentService,PaymentService paymentService,BalanceService balanceService) {
         this.paymentService = paymentService;
         this.balanceService = balanceService;
         this.spentService = spentService;
+        this.extractService = extractService;
     }
 
     @PostMapping
     public ResponseEntity<SpentDTO> createPayment(@RequestBody SpentDTO spentDTO) {
         SpentDTO createdSpent = spentService.createSpent(spentDTO);
+
+        extractService.createExtractSpent(spentDTO);
+
         return ResponseEntity.ok(createdSpent);
     }
 }
