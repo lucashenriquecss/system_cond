@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @Table(name = "payments")
 @Getter
@@ -15,47 +18,42 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    private Integer value;
-    private String dueDate;
-    private String status;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @JsonIgnore // Ignorar a propriedade unit durante a serialização JSON
+    private Number value;
+
+    private LocalDateTime dueDate;
+
+
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="resident_id")
     private Resident resident;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getValue() {
+    public Number getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Number value) {
         this.value = value;
     }
 
-    public String getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public Resident getResident() {
