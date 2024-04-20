@@ -1,8 +1,10 @@
 package com.example.system_cond.service;
 
 import com.example.system_cond.dto.ResidentDTO;
+import com.example.system_cond.entity.Booking;
 import com.example.system_cond.entity.Residence;
 import com.example.system_cond.entity.Resident;
+import com.example.system_cond.repository.BookingRepository;
 import com.example.system_cond.repository.ResidenceRepository;
 import com.example.system_cond.repository.ResidentRepository;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,12 @@ import java.util.stream.Collectors;
 public class ResidentService {
     private final ResidentRepository residentRepository;
     private final ResidenceRepository residenceRepository;
+    private final BookingRepository bookingRepository;
 
-    public ResidentService(ResidentRepository residentRepository, ResidenceRepository residenceRepository) {
+    public ResidentService(BookingRepository bookingRepository,ResidentRepository residentRepository, ResidenceRepository residenceRepository) {
         this.residentRepository = residentRepository;
         this.residenceRepository = residenceRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     public List<ResidentDTO> getAllResidents() {
@@ -46,7 +50,19 @@ public class ResidentService {
             resident.setName(residentDTO.getName());
             resident.setContact(residentDTO.getContact());
             resident.setEmail(residentDTO.getEmail());
-            
+            if (residentDTO.getBookingId() != null) {
+
+                Optional<Booking> bookingOptional = bookingRepository.findById(residentDTO.getBookingId());
+                if (bookingOptional.isPresent()) {
+                    Booking booking = bookingOptional.get();
+
+                    resident.setBooking(booking);
+                }
+            } else {
+
+                resident.setBooking(null);
+            }
+
             Resident updatedResident = residentRepository.save(resident);
             return convertToDTO(updatedResident);
         }
@@ -63,6 +79,7 @@ public class ResidentService {
         residentDTO.setName(resident.getName());
         residentDTO.setContact(resident.getContact());
         residentDTO.setEmail(resident.getEmail());
+        residentDTO.setBookingId(resident.getBooking().getId());
         residentDTO.setResidenceId(resident.getResidence().getId());
         return residentDTO;
     }

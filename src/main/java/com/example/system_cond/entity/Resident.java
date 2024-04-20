@@ -105,4 +105,6 @@ public class Resident {
     public void setResidence(Residence residence) {
         this.residence = residence;
     }
+
+
 }
