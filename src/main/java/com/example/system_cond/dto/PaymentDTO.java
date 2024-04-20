@@ -1,36 +1,25 @@
-package com.example.system_cond.entity;
+package com.example.system_cond.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.example.system_cond.entity.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
-@Table(name = "payments")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Payment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PaymentDTO extends Payment {
     private Long id;
 
     private Integer value;
-
-    private LocalDateTime dueDate;
     private String status;
+    private LocalDateTime dueDate;
 
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="resident_id")
-    private Resident resident;
+    private Long residentId;
 
     public Long getId() {
         return id;
@@ -39,6 +28,7 @@ public class Payment {
     public String getStatus() {
         return status;
     }
+
 
     public void setStatus(String status) {
         this.status = status;
@@ -52,6 +42,7 @@ public class Payment {
         return value;
     }
 
+
     public void setValue(Integer value) {
         this.value = value;
     }
@@ -64,11 +55,11 @@ public class Payment {
         this.dueDate = dueDate;
     }
 
-    public Resident getResident() {
-        return resident;
+    public Long getResidentId() {
+        return residentId;
     }
 
-    public void setResident(Resident resident) {
-        this.resident = resident;
+    public void setResidentId(Long residentId) {
+        this.residentId = residentId;
     }
 }

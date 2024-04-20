@@ -1,7 +1,5 @@
-package com.example.system_cond.entity;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+package com.example.system_cond.dto;
+import com.example.system_cond.entity.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,27 +7,19 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "transactions")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Transaction {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TransactionDTO extends Transaction {
     private Long id;
     private Integer value;
     private String description;
     private LocalDateTime transactionDate;
     private String type;
     private String detail;
+    private Long walletId;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="wallet_id")
-    private Wallet wallet;
 
     public Long getId() {
         return id;
@@ -79,11 +69,11 @@ public class Transaction {
         this.detail = detail;
     }
 
-    public Wallet getWallet() {
-        return wallet;
+    public Long getWalletId() {
+        return walletId;
     }
 
-    public void setWallet(Wallet wallet) {
-        this.wallet = wallet;
+    public void setWalletId(Long walletId) {
+        this.walletId = walletId;
     }
 }

@@ -18,7 +18,7 @@ public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Number wallet;
+    private Integer wallet;
 
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
@@ -31,11 +31,11 @@ public class Wallet {
         this.id = id;
     }
 
-    public Number getWallet() {
+    public Integer getWallet() {
         return wallet;
     }
 
-    public void setWallet(Number wallet) {
+    public void setWallet(Integer wallet) {
         this.wallet = wallet;
     }
 

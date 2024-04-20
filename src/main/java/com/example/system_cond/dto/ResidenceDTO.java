@@ -1,40 +1,31 @@
-package com.example.system_cond.entity;
-import jakarta.persistence.*;
-import lombok.*;
+package com.example.system_cond.dto;
+import com.example.system_cond.entity.Residence;
+import com.example.system_cond.entity.Resident;
+import jakarta.persistence.Column;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-
-@Entity
-@Table(name = "residences")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Residence {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ResidenceDTO extends Residence {
+
     private Long id;
 
 
-    @Column(length = 10,unique = true)
-    private Integer number;
-    @Column(length = 10,unique = true)
-    private Integer roomNumber;
 
-    @OneToMany(mappedBy = "residence", cascade = CascadeType.ALL)
+    private Integer number;
+
+    private Integer roomNumber;
     private List<Resident> residents;
 
     public Long getId() {
         return id;
-    }
-
-    public List<Resident> getResidents() {
-        return residents;
-    }
-
-    public void setResidents(List<Resident> residents) {
-        this.residents = residents;
     }
 
     public void setId(Long id) {
@@ -49,11 +40,21 @@ public class Residence {
         this.number = number;
     }
 
+
     public Integer getRoomNumber() {
         return roomNumber;
     }
 
+
     public void setRoomNumber(Integer roomNumber) {
         this.roomNumber = roomNumber;
+    }
+
+    public List<Resident> getResidents() {
+        return residents;
+    }
+
+    public void setResidents(List<Resident> residents) {
+        this.residents = residents;
     }
 }
