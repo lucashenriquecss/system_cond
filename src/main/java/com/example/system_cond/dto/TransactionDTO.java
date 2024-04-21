@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,11 +14,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class TransactionDTO extends Transaction {
     private Long id;
-    private Integer value;
+    private BigDecimal value;
     private String description;
     private LocalDateTime transactionDate;
     private String type;
-    private String detail;
+    private String payer;
+    private String payee;
     private Long walletId;
 
 
@@ -29,11 +31,11 @@ public class TransactionDTO extends Transaction {
         this.id = id;
     }
 
-    public Integer getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 
@@ -61,13 +63,6 @@ public class TransactionDTO extends Transaction {
         this.type = type;
     }
 
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
 
     public Long getWalletId() {
         return walletId;
@@ -75,5 +70,22 @@ public class TransactionDTO extends Transaction {
 
     public void setWalletId(Long walletId) {
         this.walletId = walletId;
+    }
+
+    public String getPayer() {
+        return payer;
+    }
+
+    public void setPayer(String payer) {
+        this.payer = payer;
+    }
+
+
+    public String getPayee() {
+        return payee;
+    }
+
+    public void setPayee(String payee) {
+        this.payee = payee;
     }
 }

@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,12 +22,18 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer value;
+    @Column(scale = 2)
+    private BigDecimal value;
     private String description;
-    private LocalDateTime transactionDate;
+    @CreatedDate
+    private LocalDateTime createdAt;
     private String type;
-    private String detail;
+    private String payer;
+    private String payee;
 
+//    public Transaction {
+//        value = value.setScale(2);
+//    }
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="wallet_id")
@@ -35,17 +43,18 @@ public class Transaction {
         return id;
     }
 
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getValue() {
-        return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
-    }
 
     public String getDescription() {
         return description;
@@ -55,13 +64,7 @@ public class Transaction {
         this.description = description;
     }
 
-    public LocalDateTime getTransactionDate() {
-        return transactionDate;
-    }
 
-    public void setTransactionDate(LocalDateTime transactionDate) {
-        this.transactionDate = transactionDate;
-    }
 
     public String getType() {
         return type;
@@ -71,12 +74,28 @@ public class Transaction {
         this.type = type;
     }
 
-    public String getDetail() {
-        return detail;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getPayer() {
+        return payer;
+    }
+
+    public void setPayer(String payer) {
+        this.payer = payer;
+    }
+
+    public String getPayee() {
+        return payee;
+    }
+
+    public void setPayee(String payee) {
+        this.payee = payee;
     }
 
     public Wallet getWallet() {
@@ -86,4 +105,6 @@ public class Transaction {
     public void setWallet(Wallet wallet) {
         this.wallet = wallet;
     }
+
+
 }

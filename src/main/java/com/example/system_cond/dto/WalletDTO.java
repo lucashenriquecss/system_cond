@@ -4,13 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class WalletDTO extends Wallet {
     private Long id;
-    private Integer wallet;
+    private BigDecimal wallet;
 
     public Long getId() {
         return id;
@@ -20,11 +23,13 @@ public class WalletDTO extends Wallet {
         this.id = id;
     }
 
-    public Integer getWallet() {
+    public BigDecimal getWallet() {
         return wallet;
     }
 
-    public void setWallet(Integer wallet) {
+
+    public void setWallet(BigDecimal wallet) {
         this.wallet = wallet;
     }
+
 }
