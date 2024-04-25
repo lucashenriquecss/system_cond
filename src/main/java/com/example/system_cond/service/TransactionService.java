@@ -12,6 +12,7 @@ import com.example.system_cond.repository.WalletRepository;
 import com.example.system_cond.utils.InsufficientWalletException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -27,33 +28,23 @@ public class TransactionService {
 
     public TransactionDTO createTransaction(TransactionDTO transactionDTO){
          //validar
+        validate(transactionDTO);
         //criar transac
         Transaction transaction = convertToEntity(transactionDTO);
          var newTransaction = transactionRepository.save(transaction);
         //debitar
-        Optional<Wallet> walletOptional = walletRepository.findById(transactionDTO.getWalletId());
+        var walletOptional = walletRepository.findById(transactionDTO.getWalletId()).get();
 
-        if (walletOptional.isPresent()) {
-            Wallet wallet = walletOptional.get();
-
-            if(transactionDTO.getType() == "spent"){
-                validate(transactionDTO);
-                wallet.debit(transactionDTO.getValue());
-            }else{
-                wallet.added(transactionDTO.getValue());
-            }
-
-            walletRepository.save(wallet);
-
-        } else {
-
-            Wallet newWallet = new Wallet();
-
-            newWallet.setId(transactionDTO.getWalletId());
-            newWallet.setWallet(transactionDTO.getValue().negate());
-
-            walletRepository.save(newWallet);
+        if("spent".equals(transactionDTO.getType())){
+           // validate(transactionDTO);
+            walletOptional.setDebit(transactionDTO.getValue());
+        }else{
+            walletOptional.setAdd(transactionDTO.getValue());
         }
+
+        walletRepository.save(walletOptional);
+
+
         return convertToDTO(newTransaction);
     }
 
@@ -74,6 +65,12 @@ public class TransactionService {
             } else {
                 throw new IllegalArgumentException("Carteira não encontrada.");
             }
+        }
+        Optional<Wallet> walletOptional = walletRepository.findById(transactionDTO.getWalletId());
+        if(walletOptional.isEmpty()){
+            Wallet wallet = new Wallet();
+            wallet.setWallet(BigDecimal.valueOf(0));
+            walletRepository.save(wallet);
         }
     }
 

@@ -34,6 +34,13 @@ public class Wallet {
         return wallet;
     }
 
+    public void setAdd(BigDecimal value){
+        this.wallet = wallet.add(value);
+    }
+    public void setDebit(BigDecimal value){
+        this.wallet = wallet.subtract(value);
+    }
+
     public void setWallet(BigDecimal wallet) {
         this.wallet = wallet;
     }

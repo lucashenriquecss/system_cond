@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/payment")
 public class PaymentController {
     private final PaymentService paymentService;
-
-    public PaymentController(PaymentService paymentService) {
+    private final TransactionService transactionService;
+    public PaymentController(TransactionService transactionService,PaymentService paymentService) {
         this.paymentService = paymentService;
-
+        this.transactionService = transactionService;
     }
 
     @GetMapping
@@ -41,8 +41,8 @@ public class PaymentController {
     @PutMapping("/{id}")
     public ResponseEntity<PaymentDTO> updatePayment(@PathVariable String id, @RequestBody PaymentDTO paymentDTO) {
         PaymentDTO updatedPayment = paymentService.updatePayment(id, paymentDTO);
-
-
+        TransactionDTO transactionDTO = convertDTOTransaction(paymentDTO);
+        transactionService.createTransaction(transactionDTO);
         return ResponseEntity.ok(updatedPayment);
     }
 
@@ -58,5 +58,15 @@ public class PaymentController {
         paymentDTO.setStatus(payment.getStatus());
 
         return paymentDTO;
+    }
+    private TransactionDTO convertDTOTransaction(PaymentDTO paymentDTO){
+        TransactionDTO transactionDTO = new TransactionDTO();
+        transactionDTO.setValue(paymentDTO.getValue());
+        transactionDTO.setType("payment");
+        transactionDTO.setPayer(String.valueOf(paymentDTO.getResidentId()));
+        transactionDTO.setPayee("Condominio");
+        transactionDTO.setWalletId(Long.valueOf(1));
+        transactionDTO.setDescription("Pagamento mensal do condominio");
+        return transactionDTO;
     }
 }

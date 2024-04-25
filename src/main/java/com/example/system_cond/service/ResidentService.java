@@ -79,7 +79,9 @@ public class ResidentService {
         residentDTO.setName(resident.getName());
         residentDTO.setContact(resident.getContact());
         residentDTO.setEmail(resident.getEmail());
-        residentDTO.setBookingId(resident.getBooking().getId());
+        if (resident.getBooking() != null) {
+            residentDTO.setBookingId(resident.getBooking().getId());
+        }
         residentDTO.setResidenceId(resident.getResidence().getId());
         return residentDTO;
     }

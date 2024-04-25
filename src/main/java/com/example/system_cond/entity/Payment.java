@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer value;
+    private BigDecimal value;
 
     private LocalDateTime dueDate;
     private String status;
@@ -48,11 +49,11 @@ public class Payment {
         this.id = id;
     }
 
-    public Integer getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class PaymentDTO extends Payment {
     private Long id;
 
-    private Integer value;
+    private BigDecimal value;
     private String status;
     private LocalDateTime dueDate;
 
@@ -38,12 +39,12 @@ public class PaymentDTO extends Payment {
         this.id = id;
     }
 
-    public Integer getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
 
-    public void setValue(Integer value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 
