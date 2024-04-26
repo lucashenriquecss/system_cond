@@ -1,10 +1,13 @@
 package com.example.system_cond.controller;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import com.example.system_cond.entity.*;
 import com.example.system_cond.dto.*;
 import com.example.system_cond.service.*;
 import org.springframework.http.ResponseEntity;
+
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -13,9 +16,12 @@ import java.util.stream.Collectors;
 public class PaymentController {
     private final PaymentService paymentService;
     private final TransactionService transactionService;
-    public PaymentController(TransactionService transactionService,PaymentService paymentService) {
+    private final ResidentService residentService;
+
+    public PaymentController(ResidentService residentService,TransactionService transactionService,PaymentService paymentService) {
         this.paymentService = paymentService;
         this.transactionService = transactionService;
+        this.residentService = residentService;
     }
 
     @GetMapping
@@ -37,6 +43,17 @@ public class PaymentController {
         PaymentDTO createdPayment = paymentService.createPayment(paymentDTO);
         return ResponseEntity.ok(createdPayment);
     }
+    @Scheduled(cron = "* * * * *")
+    public void createJobPayment() {
+        List<Long> residentIds = residentService.getAllResidentIds();
+        for (Long residentId : residentIds) {
+            PaymentDTO paymentDTO = new PaymentDTO();
+            paymentDTO.setResidentId(residentId);
+            paymentDTO.setStatus("pending");
+            paymentDTO.setValue(BigDecimal.valueOf(500.00));
+            PaymentDTO createdPayment = paymentService.createPayment(paymentDTO);
+        }
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<PaymentDTO> updatePayment(@PathVariable String id, @RequestBody PaymentDTO paymentDTO) {
@@ -51,6 +68,7 @@ public class PaymentController {
         paymentService.deletePayment(id);
         return ResponseEntity.noContent().build();
     }
+
     private PaymentDTO convertToDTO(Payment payment) {
         PaymentDTO paymentDTO = new PaymentDTO();
         paymentDTO.setValue(payment.getValue());

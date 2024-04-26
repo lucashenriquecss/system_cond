@@ -30,7 +30,11 @@ public class ResidentService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-
+    public List<Long> getAllResidentIds() {
+        return residentRepository.findAll().stream()
+                .map(Resident::getId)
+                .collect(Collectors.toList());
+    }
     public ResidentDTO getResidentById(String id) {
         Optional<Resident> residentOptional = residentRepository.findById(id);
         return residentOptional.map(this::convertToDTO).orElse(null);
@@ -74,7 +78,7 @@ public class ResidentService {
     }
 
     private ResidentDTO convertToDTO(Resident resident) {
-        ResidentDTO residentDTO = new ResidentDTO(); //adicionar ID eo restante no retorno
+        ResidentDTO residentDTO = new ResidentDTO();
 
         residentDTO.setName(resident.getName());
         residentDTO.setContact(resident.getContact());
