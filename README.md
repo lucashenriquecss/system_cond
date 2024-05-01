@@ -37,3 +37,5 @@ graph TD
 
 - **Descrição**: Representa a carteira financeira do condomínio.
 - **Funcionalidades**: Gerencia o saldo e as transações financeiras do condomínio.
+  
+## Projeto para aprendizagem 
