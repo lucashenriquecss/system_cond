@@ -43,17 +43,17 @@ public class PaymentController {
         PaymentDTO createdPayment = paymentService.createPayment(paymentDTO);
         return ResponseEntity.ok(createdPayment);
     }
-    @Scheduled(cron = "* * * * *")
-    public void createJobPayment() {
-        List<Long> residentIds = residentService.getAllResidentIds();
-        for (Long residentId : residentIds) {
-            PaymentDTO paymentDTO = new PaymentDTO();
-            paymentDTO.setResidentId(residentId);
-            paymentDTO.setStatus("pending");
-            paymentDTO.setValue(BigDecimal.valueOf(500.00));
-            PaymentDTO createdPayment = paymentService.createPayment(paymentDTO);
-        }
-    }
+//    @Scheduled(cron = "* * * * *")
+//    public void createJobPayment() { desativado, possibilidade de ser no frontend
+//        List<Long> residentIds = residentService.getAllResidentIds();
+//        for (Long residentId : residentIds) {
+//            PaymentDTO paymentDTO = new PaymentDTO();
+//            paymentDTO.setResidentId(residentId);
+//            paymentDTO.setStatus("pending");
+//            paymentDTO.setValue(BigDecimal.valueOf(500.00));
+//            PaymentDTO createdPayment = paymentService.createPayment(paymentDTO);
+//        }
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<PaymentDTO> updatePayment(@PathVariable String id, @RequestBody PaymentDTO paymentDTO) {
